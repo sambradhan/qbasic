@@ -1,0 +1,160 @@
+DECLARE SUB add()
+DECLARE SUB dis()
+DECLARE SUB ser()
+DECLARE SUB del()
+DECLARE SUB eid()
+DECLARE SUB res()
+Cls
+Input "do you have account Y = yess, n = no "; ac$
+Open "users.dat" For Append As #1
+Input "Enter user name: "; us$
+Input "Enter password: "; pa$
+Input #1, us$, pa$
+If UCase$(us$) = UCase$(us$) And UCase$(pa$) = UCase$(pa$) Then
+    Do
+        Print "Press 1/2/3/4/5/6"
+        Print "1) Add"
+        Print "2) Display"
+        Print "3) Search"
+        Print "4) Delete"
+        Print "5) Edit"
+        Print "6) Exit"
+
+        Input "Enter your choice: "; ch
+        Select Case ch
+            Case 1
+                Call add
+            Case 2
+                Call dis
+            Case 3
+                Call ser
+            Case 4
+                Call del
+            Case 5
+                Call eid
+            Case 6
+                End
+            Case Else
+                Print "Wrong choice!!!"
+        End Select
+    Loop
+Else
+    Print "Incorrect password or user name"
+    else if
+     Select Case as$
+            Case 1
+                Call res
+
+    Input "If you want to register then press R or r: "; sh$
+    Select Case UCase$(sh$)
+        Case "R"
+            Call res
+        Case Else
+            Print "Exiting the program..."
+    End Select
+End If
+
+End
+
+Sub add
+    Open "lar mang sy.dat" For Append As #1
+    Do
+        Input "Enter book name to add: "; bn$
+        Input "Enter book number: "; bn
+        Write #1, bn$, bn
+        Input "Press Y to add more data: "; ch$
+    Loop While UCase$(ch$) = "Y"
+    Close #1
+End Sub
+
+Sub dis
+    Open "lar mang sy.dat" For Input As #1
+
+    ' Check if the file is empty
+    If EOF(1) Then
+        Print "The file is empty."
+        Close #1
+        Exit Sub
+    End If
+
+    Print "Book name, Book number"
+    Do While Not EOF(1)
+        Input #1, bn$, bn
+        Print bn$, bn
+    Loop
+
+    Close #1
+End Sub
+
+Sub ser
+    Open "lar mang sy.dat" For Input As #1
+    Input "Enter book name or book number to search: "; bns$
+    found = 0
+    Do While Not EOF(1)
+        Input #1, bn$, bn
+        If UCase$(bns$) = UCase$(bn$) Or Val(bns$) = bn Then
+            Print "Book found: "; bn$, bn
+            found = 1
+        End If
+    Loop
+    If found = 0 Then Print "Book not found!"
+    Close #1
+End Sub
+
+Sub del
+    Open "lar mang sy.dat" For Input As #1
+    Open "temp.dat" For Output As #2
+    Input "Enter book name to delete: "; bnd$
+
+    Do While Not EOF(1)
+        Input #1, bn$, bn
+        If UCase$(bn$) <> UCase$(bnd$) Then
+            Write #2, bn$, bn
+        End If
+    Loop
+
+    Close #1
+    Close #2
+    Kill "lar mang sy.dat"
+    Name "temp.dat" As "lar mang sy.dat"
+    Print "Book deleted!"
+End Sub
+
+Sub eid
+    Open "lar mang sy.dat" For Input As #1
+    Open "temp.dat" For Output As #2
+    Input "Enter book name or book number to edit: "; bne$
+    found = 0
+
+    Do While Not EOF(1)
+        Input #1, bn$, bn
+        If UCase$(bne$) = UCase$(bn$) Or Val(bne$) = bn Then
+            Input "Enter new book name: "; nbne$
+            Input "Enter new book number: "; nbe
+            Write #2, nbne$, nbe
+            found = 1
+        Else
+            Write #2, bn$, bn
+        End If
+    Loop
+
+    If found = 0 Then
+        Print "Record not found!"
+    Else
+        Print "Record updated!"
+    End If
+
+    Close #1
+    Close #2
+    Kill "lar mang sy.dat"
+    Name "temp.dat" As "lar mang sy.dat"
+End Sub
+
+Sub res
+    Open "users.dat" For Append As #1
+    Input "Enter a new user name: "; us$
+    Input "Enter a new password: "; pa$
+    Write #1, us$, ps$
+    Close #1
+    Print "Registration successful! You can now log in with your new credentials."
+End Sub
